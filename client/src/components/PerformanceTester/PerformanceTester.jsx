@@ -6,7 +6,7 @@ import Opportunities from '../Opportunities/Opportunities';
 import Diagnostics from '../Diagnostics/Diagnostic';
 import Metrics from '../metrics/Metrics';
 import Score from '../score/Score';
-import PageLoadFilmstrip from '../PreLoadFilmStrip/PreloadFilmStrip';
+import PageLoadFilmstrip from '../PreLoadFilmStrip/PreLoadFilmStrip';
 import ResouceDoughnutChart from '../DonutChart/ResouceDoughnutChart';
 import Waterfall from '../Waterfall/Waterfall';
 import Accessibility from '../Accessibilty/Accessibility';
