@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from "./components/homepage/Homepage";
+import HomePage from "./components/homepage/HomePage";
 import PerformanceTester from "./components/PerformanceTester/PerformanceTester";
 import SkeletonBar from "./components/skeletonBarGraph/skeletonBar";
 import NotFound from './pages/NotFounds/NotFound';
