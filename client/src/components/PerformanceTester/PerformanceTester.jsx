@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import './PerformanceTester.css'
-import SkeletonBar from '../skeletonBarGraph/skeletonBar';
+import SkeletonBar from '../skeletonBarGraph/SkeletonBar';
 import Opportunities from '../Opportunities/Opportunities';
 import Diagnostics from '../Diagnostics/Diagnostic';
 import Metrics from '../metrics/Metrics';

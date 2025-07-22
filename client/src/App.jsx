@@ -1,9 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from "./components/homepage/HomePage";
 import PerformanceTester from "./components/PerformanceTester/PerformanceTester";
-import SkeletonBar from "./components/skeletonBarGraph/skeletonBar";
 import NotFound from './pages/NotFounds/NotFound';
 import MainLayout from './Layout/MainLayout';
+import SkeletonBar from './components/skeletonBarGraph/SkeletonBar'
 
 function App() {
   return (
