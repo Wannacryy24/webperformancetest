@@ -1,0 +1,16 @@
+.metrics{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.metrics h2{
+    font-family: "WDXL Lubrifont TC", sans-serif;
+    letter-spacing: 2px;
+    font-size: 3.5rem;
+}
+.metrics {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+}

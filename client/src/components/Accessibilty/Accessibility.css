@@ -1,0 +1,23 @@
+.highlighted-accessibility {
+  outline: 3px dashed red !important;
+  background-color: rgba(255, 0, 0, 0.1) !important;
+  transition: all 0.3s ease-in-out;
+}
+
+
+.acessibility-box-div{
+    margin-top:8vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 40px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 20px;
+}
+
+.acessibility-h2{
+    font-weight: 400;
+
+}
+

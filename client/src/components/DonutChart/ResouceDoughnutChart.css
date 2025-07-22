@@ -1,0 +1,23 @@
+.ResouceDoughnut-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 20px;
+}
+
+.ResouceDoughnut-inner-div-left {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  padding: 16px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.ResouceDoughnut-inner-div-left:hover {
+  transform: scale(1.03);
+}
