@@ -27,9 +27,10 @@ app.post('/audit', async (req, res) => {
 
   try {
     browser = await puppeteer.launch({
-      headless: 'new', // or true if needed
+      headless: true, // ✅ always use `true` on Render
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
+
 
     const page = await browser.newPage();
     const client = await page.createCDPSession();
