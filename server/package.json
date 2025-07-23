@@ -6,8 +6,8 @@
     "puppeteer": "^22.15.0"
   },
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "PUPPETEER_CACHE_DIR=/tmp/puppeteer-cache npx puppeteer browsers install chrome"
+  "start": "node server.js",
+  "postinstall": "PUPPETEER_CACHE_DIR=/tmp/puppeteer-cache npx puppeteer browsers install chrome"
+}
 
-  }
 }
