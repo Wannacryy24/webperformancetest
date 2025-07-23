@@ -1,10 +1,12 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
 const lighthouse = require('lighthouse').default;
 const cors = require('cors');
 const { URL } = require('url');
 const extractBestPracticesIssues = require('./utils/extractBestPractice');
 const app = express();
+const chrome = require('chrome-aws-lambda');
+const puppeteer = require('puppeteer-core');
+
 
 app.use(cors({
   origin: ['https://webpilot.onrender.com', 'http://localhost:3001'],
@@ -25,9 +27,9 @@ app.post('/audit', async (req, res) => {
 
   try {
     browser = await puppeteer.launch({
-      headless: 'new',
-      executablePath: puppeteer.executablePath(), // <-- Ensures correct binary
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: chrome.args,
+      executablePath: await chrome.executablePath,
+      headless: chrome.headless,
     });
 
     const page = await browser.newPage();
