@@ -8,12 +8,11 @@ const puppeteer = require('puppeteer');
 const app = express();
 
 app.use(cors({
-  origin: ['https://webpilot.onrender.com', 'http://localhost:3001', 'http://localhost:5173'],
+  origin: '*',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
 
-app.options('*', cors());
 app.use(express.json());
 
 app.post('/audit', async (req, res) => {
@@ -27,10 +26,9 @@ app.post('/audit', async (req, res) => {
 
   try {
     browser = await puppeteer.launch({
-      headless: true, // ✅ always use `true` on Render
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
-
 
     const page = await browser.newPage();
     const client = await page.createCDPSession();
