@@ -3,21 +3,18 @@ const lighthouse = require('lighthouse').default;
 const cors = require('cors');
 const { URL } = require('url');
 const extractBestPracticesIssues = require('./utils/extractBestPractice');
-const app = express();
-const chrome = require('chrome-aws-lambda');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 
+const app = express();
 
 app.use(cors({
-  origin: ['https://webpilot.onrender.com', 'http://localhost:3001'],
+  origin: ['https://webpilot.onrender.com', 'http://localhost:3001', 'http://localhost:5173'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
 
-app.options('*', cors()); // 👈 Add this line
-
+app.options('*', cors());
 app.use(express.json());
-
 
 app.post('/audit', async (req, res) => {
   const { url } = req.body;
@@ -30,73 +27,49 @@ app.post('/audit', async (req, res) => {
 
   try {
     browser = await puppeteer.launch({
-      args: chrome.args,
-      executablePath: await chrome.executablePath,
-      headless: chrome.headless,
+      headless: 'new', // or true if needed
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
     const page = await browser.newPage();
-
-    // ---------- NETWORK CAPTURE ----------
     const client = await page.createCDPSession();
-
     await client.send('Network.enable');
 
-    // Track per-request state
-    const requests = new Map(); // requestId -> { ... }
+    const requests = new Map();
 
-    // request start
-    client.on('Network.requestWillBeSent', (params) => {
-      const { requestId, request, timestamp, type } = params;
-      requests.set(requestId, {
-        url: request.url,
-        type,
-        startTs: timestamp, // seconds (monotonic)
-      });
+    client.on('Network.requestWillBeSent', ({ requestId, request, timestamp, type }) => {
+      requests.set(requestId, { url: request.url, type, startTs: timestamp });
     });
 
-    // response metadata + phase timings
-    client.on('Network.responseReceived', (params) => {
-      const { requestId, response } = params;
+    client.on('Network.responseReceived', ({ requestId, response }) => {
       const rec = requests.get(requestId);
-      console.log('record', rec);
-      if (!rec) return;
-
-      rec.status = response.status;
-      rec.mimeType = response.mimeType;
-      rec.timing = response.timing || null; // may be undefined
+      if (rec) {
+        rec.status = response.status;
+        rec.mimeType = response.mimeType;
+        rec.timing = response.timing || null;
+      }
     });
 
-    // request end (successful)
-    client.on('Network.loadingFinished', (params) => {
-      const { requestId, timestamp, encodedDataLength } = params;
+    client.on('Network.loadingFinished', ({ requestId, timestamp, encodedDataLength }) => {
       const rec = requests.get(requestId);
-      if (!rec) return;
-      rec.endTs = timestamp; // seconds (monotonic)
-      rec.encodedDataLength = encodedDataLength;
-      rec.failed = false;
+      if (rec) {
+        rec.endTs = timestamp;
+        rec.encodedDataLength = encodedDataLength;
+        rec.failed = false;
+      }
     });
 
-    // request end (failed)
-    client.on('Network.loadingFailed', (params) => {
-      const { requestId, timestamp, errorText } = params;
+    client.on('Network.loadingFailed', ({ requestId, timestamp, errorText }) => {
       const rec = requests.get(requestId);
-      if (!rec) return;
-      rec.endTs = timestamp; // seconds (monotonic)
-      rec.errorText = errorText;
-      rec.failed = true;
+      if (rec) {
+        rec.endTs = timestamp;
+        rec.errorText = errorText;
+        rec.failed = true;
+      }
     });
 
-    // ---------- NAVIGATE ----------
-    // You used {waitUntil:'load'}; consider 'networkidle0' to capture more late requests.
-    // Using 'networkidle2' is often safer (allows some analytics beacons).
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
-    // Give a short grace period for very-late beacons (optional)
-    // await page.waitForTimeout(1000);
-
-    // ---------- BUILD WATERFALL DATA ----------
-    // Normalize timestamps so the earliest start is 0ms.
     let minStart = Infinity;
     for (const r of requests.values()) {
       if (typeof r.startTs === 'number' && r.startTs < minStart) {
@@ -105,37 +78,24 @@ app.post('/audit', async (req, res) => {
     }
     if (!isFinite(minStart)) minStart = 0;
 
-    function safePhase(v) {
-      return typeof v === 'number' && v >= 0 ? v : 0;
-    }
+    const safePhase = v => (typeof v === 'number' && v >= 0 ? v : 0);
 
-    function extractPhases(timing) {
-      if (!timing) {
-        return { dns: 0, connect: 0, ssl: 0, ttfb: 0 };
-      }
+    const extractPhases = (timing) => {
+      if (!timing) return { dns: 0, connect: 0, ssl: 0, ttfb: 0 };
       const dns = safePhase(timing.dnsEnd - timing.dnsStart);
       const connect = safePhase(timing.connectEnd - timing.connectStart);
       const ssl = safePhase(timing.sslEnd - timing.sslStart);
       const ttfb = safePhase(timing.receiveHeadersEnd - timing.sendEnd);
       return { dns, connect, ssl, ttfb };
-    }
+    };
 
     const networkEvents = [];
     for (const rec of requests.values()) {
-      // convert to ms baseline 0
-      const startMs = typeof rec.startTs === 'number' ? (rec.startTs - minStart) * 1000 : 0;
-      const endMs = typeof rec.endTs === 'number' ? (rec.endTs - minStart) * 1000 : startMs;
-
+      const startMs = (rec.startTs - minStart) * 1000;
+      const endMs = (rec.endTs - minStart) * 1000;
       const total = endMs - startMs;
-
       const { dns, connect, ssl, ttfb } = extractPhases(rec.timing);
-
-      // Approximate download if we have total
-      let download = 0;
-      if (total > 0) {
-        const known = dns + connect + ssl + ttfb;
-        download = Math.max(total - known, 0);
-      }
+      const download = total > 0 ? Math.max(total - (dns + connect + ssl + ttfb), 0) : 0;
 
       networkEvents.push({
         url: rec.url,
@@ -143,21 +103,14 @@ app.post('/audit', async (req, res) => {
         mimeType: rec.mimeType,
         startTime: startMs,
         endTime: endMs,
-        dns,
-        connect,
-        ssl,
-        ttfb,
-        download,
-        total,
+        dns, connect, ssl, ttfb, download, total,
         failed: !!rec.failed,
       });
     }
 
-    // Limit (as before)
     const waterfallLimited = networkEvents.slice(0, 40);
-
-    // ---------- LIGHTHOUSE ----------
     const port = new URL(browser.wsEndpoint()).port;
+
     const result = await lighthouse(url, {
       port,
       output: 'json',
@@ -184,11 +137,12 @@ app.post('/audit', async (req, res) => {
     const resourceSizes = {};
     let totalSizeBytes = 0;
     let totalRequestCount = 0;
+
     const bestPracticesIssues = extractBestPracticesIssues(audits, categories['best-practices']);
 
-    resourceSummary.forEach((item) => {
+    resourceSummary.forEach(item => {
       const label = item.label;
-      const bytes = typeof item.totalBytes === 'number' ? item.totalBytes : 0;
+      const bytes = item.totalBytes || 0;
       const count = item.requestCount || 0;
 
       totalSizeBytes += bytes;
@@ -206,8 +160,8 @@ app.post('/audit', async (req, res) => {
     };
 
     const opportunities = Object.values(audits)
-      .filter((a) => a.details?.type === 'opportunity')
-      .map((a) => ({
+      .filter(a => a.details?.type === 'opportunity')
+      .map(a => ({
         id: a.id,
         title: a.title,
         description: a.description,
@@ -217,9 +171,7 @@ app.post('/audit', async (req, res) => {
     const accessibilityIssues = Object.entries(audits)
       .filter(([id, audit]) =>
         audit.score !== 1 &&
-        audit.scoreDisplayMode !== 'notApplicable' &&
-        audit.scoreDisplayMode !== 'manual' &&
-        audit.scoreDisplayMode !== 'informative'
+        !['notApplicable', 'manual', 'informative'].includes(audit.scoreDisplayMode)
       )
       .map(([id, audit]) => ({
         id,
@@ -231,10 +183,6 @@ app.post('/audit', async (req, res) => {
         nodes: audit.details?.items?.map(i => i.node).filter(Boolean) || [],
       }));
 
-
-
-
-    // ---------- RESPONSE ----------
     res.json({
       scores: {
         performance: categories.performance.score * 100,

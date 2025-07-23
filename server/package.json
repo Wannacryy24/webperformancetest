@@ -2,25 +2,14 @@
   "name": "web-audit-server",
   "version": "1.0.0",
   "main": "server.js",
+  "description": "Node.js backend for auditing web performance with Lighthouse and Puppeteer",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.1.0",
+    "express": "^4.18.2",
     "lighthouse": "^12.8.0",
-    "puppeteer": "^22.15.0",
-    "chrome-aws-lambda": "^10.1.0"
-  },
-  "scripts": {
-    "start": "node server.js",
-    "postinstall": "PUPPETEER_CACHE_DIR=/tmp/puppeteer-cache PUPPETEER_CHROMIUM_REVISION=1270180 npx puppeteer browsers install chrome"
-
+    "puppeteer": "^24.14.0"
   }
 }
-
-
-
-
-
-
-
-
-
