@@ -14,7 +14,10 @@ app.use(cors({
   allowedHeaders: ['Content-Type'],
 }));
 
+app.options('*', cors()); // 👈 Add this line
+
 app.use(express.json());
+
 
 app.post('/audit', async (req, res) => {
   const { url } = req.body;
