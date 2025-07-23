@@ -1,4 +1,8 @@
 {
+  "name": "web-audit-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
@@ -6,8 +10,7 @@
     "puppeteer": "^22.15.0"
   },
   "scripts": {
-  "start": "node server.js",
-  "postinstall": "PUPPETEER_CACHE_DIR=/tmp/puppeteer-cache npx puppeteer browsers install chrome"
-}
-
+    "start": "node server.js",
+    "postinstall": "PUPPETEER_CACHE_DIR=/tmp/puppeteer-cache PUPPETEER_CHROMIUM_REVISION=1270180 npx puppeteer browsers install chrome"
+  }
 }

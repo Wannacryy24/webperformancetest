@@ -6,7 +6,6 @@ const { URL } = require('url');
 const extractBestPracticesIssues = require('./utils/extractBestPractice');
 const app = express();
 
-
 app.use(cors({
   origin: ['https://webpilot.onrender.com', 'http://localhost:3001'],
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -26,11 +25,10 @@ app.post('/audit', async (req, res) => {
 
   try {
     browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      executablePath: puppeteer.executablePath() // ✅ DO NOT override this manually
+      headless: 'new',
+      executablePath: puppeteer.executablePath(), // <-- Ensures correct binary
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
-
 
     const page = await browser.newPage();
 
