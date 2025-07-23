@@ -8,7 +8,7 @@ const app = express();
 
 
 app.use(cors({
-  origin: 'https://webpilot.onrender.com',
+  origin: ['https://webpilot.onrender.com', 'http://localhost:3001'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
@@ -25,7 +25,7 @@ app.post('/audit', async (req, res) => {
   let browser;
 
   try {
-    const browser = await puppeteer.launch({
+    browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       executablePath: puppeteer.executablePath() // ✅ DO NOT override this manually
