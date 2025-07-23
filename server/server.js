@@ -8,6 +8,7 @@ const extractBestPracticesIssues = require('./utils/extractBestPractice');
 const app = express();
 app.use(cors());
 app.use(express.json());
+process.env.PUPPETEER_CACHE_DIR = '/tmp/puppeteer-cache';
 
 app.post('/audit', async (req, res) => {
   const { url } = req.body;
@@ -19,12 +20,14 @@ app.post('/audit', async (req, res) => {
   let browser;
 
   try {
+    const chromePath = require('puppeteer').executablePath();
+
+
     browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      executablePath: '/opt/render/project/.cache/puppeteer/chrome/linux-127.0.6533.88/chrome-linux64/chrome'
+      executablePath: chromePath
     });
-
 
     const page = await browser.newPage();
 
