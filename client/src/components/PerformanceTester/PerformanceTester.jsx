@@ -25,16 +25,26 @@ export default function PerformanceTester() {
         setError(null);
 
         try {
-            const res = await axios.post(`${getBackendUrl()}/audit`, { url });
+            const res = await axios.post(`${getBackendUrl()}/audit`, { url }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             setAuditData(res.data);
-            console.log(res.data);
         } catch (e) {
-            setError(e.message || 'Audit failed');
+            const errorMessage = e.response?.data?.error ||
+                e.response?.data?.message ||
+                e.message ||
+                'Audit failed';
+            setError(errorMessage);
+            console.error('Full error:', e.response?.data || e);
         } finally {
             setLoading(false);
         }
     };
 
+
+    
     return (
         <div className="performace-tester">
             <div className='input-and-button'>
