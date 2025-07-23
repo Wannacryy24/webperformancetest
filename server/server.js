@@ -5,7 +5,6 @@ const cors = require('cors');
 const { URL } = require('url');
 const extractBestPracticesIssues = require('./utils/extractBestPractice');
 
-
 const app = express();
 app.use(cors());
 app.use(express.json());

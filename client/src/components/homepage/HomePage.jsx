@@ -2,6 +2,7 @@ import "./HomePage.css";
 import image from '../../assets/hero-image-light.avif'
 import { useNavigate } from 'react-router-dom';
 import TestSummarySection from "../TestSummarySection/TestSummarySection";
+import React from 'react';
 
 
 export default function HomePage() {

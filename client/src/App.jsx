@@ -4,6 +4,7 @@ import PerformanceTester from "./components/PerformanceTester/PerformanceTester"
 import NotFound from './pages/NotFounds/NotFound';
 import MainLayout from './Layout/MainLayout';
 import SkeletonBar from './components/skeletonBarGraph/SkeletonBar'
+import React from 'react';
 
 function App() {
   return (

@@ -11,6 +11,8 @@ import ResouceDoughnutChart from '../DonutChart/ResouceDoughnutChart';
 import Waterfall from '../Waterfall/Waterfall';
 import Accessibility from '../Accessibilty/Accessibility';
 import BestPracticesCards from '../BestPractice/BestPracticesCards';
+import React from 'react';
+import getBackendUrl from '../../utils/getBackendUrl';
 
 export default function PerformanceTester() {
     const [url, setUrl] = useState('https://myportfoliovscodetheme.netlify.app/Home');
@@ -21,10 +23,11 @@ export default function PerformanceTester() {
     const handleAudit = async () => {
         setLoading(true);
         setError(null);
+
         try {
-            const res = await axios.post('http://localhost:3001/audit', { url });
+            const res = await axios.post(`${getBackendUrl()}/audit`, { url });
             setAuditData(res.data);
-            console.log(auditData);
+            console.log(res.data);
         } catch (e) {
             setError(e.message || 'Audit failed');
         } finally {

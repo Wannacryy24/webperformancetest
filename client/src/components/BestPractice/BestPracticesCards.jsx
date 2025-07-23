@@ -55,7 +55,7 @@ export default function BestPracticesIssues({ issues }) {
   });
 
   return (
-    <Box classname='best-practice-box-div'>
+    <Box className='best-practice-box-div'>
       <Box mb={2}>
         <Typography variant="h5" gutterBottom>
           🧪 Best Practice Issues
