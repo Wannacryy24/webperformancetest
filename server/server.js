@@ -4,9 +4,15 @@ const lighthouse = require('lighthouse').default;
 const cors = require('cors');
 const { URL } = require('url');
 const extractBestPracticesIssues = require('./utils/extractBestPractice');
-
 const app = express();
-app.use(cors());
+
+
+app.use(cors({
+  origin: 'https://webpilot.onrender.com',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+}));
+
 app.use(express.json());
 process.env.PUPPETEER_CACHE_DIR = '/tmp/puppeteer-cache';
 
