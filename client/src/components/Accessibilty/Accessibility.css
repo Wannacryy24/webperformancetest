@@ -4,7 +4,6 @@
   transition: all 0.3s ease-in-out;
 }
 
-
 .acessibility-box-div{
     margin-top:8vh;
     display: flex;
@@ -18,6 +17,5 @@
 
 .acessibility-h2{
     font-weight: 400;
-
 }
 

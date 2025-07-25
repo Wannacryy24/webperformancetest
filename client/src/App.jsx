@@ -5,6 +5,7 @@ import NotFound from './pages/NotFounds/NotFound';
 import MainLayout from './Layout/MainLayout';
 import SkeletonBar from './components/skeletonBarGraph/SkeletonBar'
 import React from 'react';
+import './App.css'
 
 function App() {
   return (

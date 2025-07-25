@@ -1,9 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&display=swap');
+
 .header {
-  background: white;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   padding: 16px 2rem;
-  border-radius: 50px;
-  max-width: 70%;
   margin: 20px auto;
   border-bottom: 1px solid #ddd;
   position: relative;
@@ -20,9 +18,22 @@
 .logo {
   display: flex;
   align-items: center;
+  gap: .5rem;
   font-weight: bold;
   font-size: 1.5rem;
-  color: #1e40af;
+  font-family: "Bitcount Prop Single", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 550;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "CRSV" 0.5,
+    "ELSH" 0,
+    "ELXP" 0;
+}
+
+.logo-text {
+  font-size: 2rem;
 }
 
 .logo-icon {
@@ -31,9 +42,9 @@
   font-size: 24px;
 }
 
-.logo-icon img{
-  height: 40px;
-  width: 40px;
+.logo-icon img {
+  height: 30px;
+  width: 30px;
 }
 
 .nav {
@@ -43,10 +54,19 @@
   flex-grow: 1;
   justify-content: center;
   position: relative;
+  font-family: "Bitcount Prop Single", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 550;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "CRSV" 0.5,
+    "ELSH" 0,
+    "ELXP" 0;
 }
 
 .nav-item {
-  font-size: 16px;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #2f3e4e;
   cursor: pointer;
@@ -74,7 +94,7 @@
   left: 0;
   background-color: #fff;
   padding: 0.75rem 1rem;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   list-style: none;
   border-radius: 5px;
   z-index: 20;
@@ -101,25 +121,32 @@
 
 /* CTA Button */
 .cta-button {
-  background-color: #133BBF;
-  color: white;
   font-weight: bold;
   padding: 10px 24px;
-  border: none;
-  border-radius: 40px;
+  border: 1px solid black;
+  border-radius: 10px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(13, 71, 161, 0.2);
-  transition: background 0.3s;
+  transition: background 0.3s;  
 }
 
-.cta-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.1);
-  transition: all 0.3s ease;
-}
 
 .nav-item {
   text-decoration: none;
-  color: inherit; /* optional: match surrounding text color */
+  color: inherit;
 }
 
+.get-started-button{
+  font-size: 1.1rem;
+  background-color: transparent;
+  border: 1px solid black;
+  border-radius: 10px;
+  height: 2rem;
+  width: 8rem;
+}
+
+.get-started-button:hover {
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}

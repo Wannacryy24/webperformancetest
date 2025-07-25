@@ -1,0 +1,14 @@
+.footer {
+    padding: 2rem;
+    background-color: #111827;
+    color: #d1d5db;
+    text-align: center;
+}
+
+footer nav a
+ {
+    color: #9ca3af;
+    margin: 0 .5rem;
+    text-decoration: none;
+    transition: color .3s;
+}

@@ -1,0 +1,48 @@
+@import '../../scss/mixins';
+
+.hero-div{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.hero-div div{
+    width: 50%;
+}
+
+.hero-image img{
+    height: 60vh;
+}
+
+.hero-inner-div-first{
+}
+
+.hero-inner-div-first{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-text-p{
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // align-items: center;
+    @include bitcount-font(500,"normal");
+    font-size: 3rem;
+}
+
+.hero-inner-div-first h2{
+    margin-top: 1rem;
+    font-size: 2.5rem;
+}
+
+.hero-button-inner-div{
+    margin-top: 3vh;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

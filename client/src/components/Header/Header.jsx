@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import "./Header.css";
 import pagepilotlogo from '../../assets/pilot.png';
+import webPerformanceLogo from '../../assets/web-maintenance.png'
 import React from 'react';
 
 
@@ -11,9 +12,9 @@ export default function Header() {
         {/* Logo */}
         <div className="logo">
           <span className="logo-icon">
-            <img src={pagepilotlogo} alt="PagePilot Logo" />
+            <img src={webPerformanceLogo} alt="PagePilot Logo" />
           </span>
-          <span className="logo-text">PagePilot</span>
+          <span className="logo-text">Page-Pilot</span>
         </div>
 
         {/* Navigation */}
@@ -42,7 +43,7 @@ export default function Header() {
         </nav>
 
         {/* CTA */}
-        <a href="#contact" className="cta-button">Contact Us</a>
+        <button className="get-started-button">Get Started</button>
       </div>
     </header>
   );
