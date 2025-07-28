@@ -1,36 +1,38 @@
-import React from 'react'
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import image from '../../assets/hero-image-light.avif'
-import './Hero.scss'
+import './Hero.scss';
 import { navigateTo } from '../../utils/navigation';
+import { FaRocket, FaInfoCircle } from 'react-icons/fa';
 
 export default function Hero() {
   const navigate = useNavigate();
 
   const handleRunTestClick = () => {
-    navigateTo(navigate,'/tester');
+    navigateTo(navigate, '/tester');
   };
 
   return (
     <div className='hero-div'>
-        <div className="hero-inner-div-first">
-          <p className="hero-text-p">
-            <span className="span-1">Instantly Audit Performance,</span>
-            <span className="span-2">Accessibility, SEO</span>
-            <span className="span-3"> and Best Practices</span>
-            <span className="span-3">— powered by Lighthouse.</span>
-          </p>
-          <div className="hero-button-inner-div">
-            <button className="get-started-button" onClick={handleRunTestClick}>
-              🧪 Run Test
-            </button>
-            <button className="get-started-button">📖 Learn More</button>
-          </div>
+      <div className="hero-inner-div-first">
+        <p className="hero-text-p">
+          <span>Instantly Audit Performance,</span><br />
+          <span>Accessibility, SEO and Best Practices</span><br />
+          <span>— powered by Lighthouse.</span>
+        </p>
+        <div className="hero-button-inner-div">
+          <button className="started-button" onClick={handleRunTestClick}>
+            <FaRocket style={{ marginRight: '8px' }} />
+            Run Test
+          </button>
+          <button className="started-button">
+            <FaInfoCircle style={{ marginRight: '8px' }} />
+            Learn More
+          </button>
         </div>
-        <div className="hero-image">
-          <img src="/undraw_metrics_5v8d.svg" alt="" />
-          {/* <img src={image} alt="Lighthouse Metrics Preview" /> */}
-        </div>
+      </div>
+      <div className="hero-image">
+        <img src="/undraw_metrics_5v8d.svg" alt="Hero illustration" />
+      </div>
     </div>
-  )
+  );
 }

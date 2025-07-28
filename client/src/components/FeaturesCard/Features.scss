@@ -46,3 +46,18 @@
     }
   }
 }
+
+@media (max-width:768px){
+  .feature-card{
+    .icon{
+      svg{
+        height: 66px;
+      }
+    }
+  }
+  .feature-card{
+    h3,p{
+      font-size: 1.2rem !important;
+    }
+  }
+}
