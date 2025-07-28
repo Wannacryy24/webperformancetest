@@ -14,6 +14,7 @@ import React from 'react';
 import getBackendUrl from '../../utils/getBackendUrl';
 import StillLoading from '../../Layout/StillLoading/StillLoading';
 import AuditProgressSteps from '../AuditStepsLoading/AuditProgressSteps';
+import html2pdf from 'html2pdf.js';
 
 export default function PerformanceTester() {
     const [url, setUrl] = useState('https://myportfoliovscodetheme.netlify.app/Home');
@@ -51,6 +52,8 @@ export default function PerformanceTester() {
                 }
             });
             setAuditData(res.data);
+            console.log(typeof res.data);
+
             console.log(res.data);
             const end = Date.now();
             setDuration(((end - start) / 1000).toFixed(2));
@@ -66,15 +69,56 @@ export default function PerformanceTester() {
         }
     };
 
-    const handleClearAudit = () => {
-        setAuditData(null);
-        setDuration(null);
-        setError(null);
+    const handleDownloadJSON = () => {
+        const jsonString = JSON.stringify(auditData, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json' });
+
+
+        // Step 3: Create a temporary URL for the Blob
+        const url = URL.createObjectURL(blob);
+
+        // Step 4: Create a hidden <a> tag to trigger download
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'audit-results.json'; // Filename
+        document.body.appendChild(a);
+        a.click(); // Trigger download
+
+        // Step 5: Clean up (revoke the Blob URL)
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Free memory
+        }, 100);
+    }
+
+    const downloadPDF = () => {
+        console.log('Download pdf clicked');
+
+        const element = document.getElementsByClassName('performace-tester')[0];
+
+        // Hide elements with class 'no-print'
+        const noPrintEls = document.querySelectorAll('.no-print');
+        noPrintEls.forEach(el => el.style.display = 'none');
+
+        const options = {
+            margin: 0,
+            filename: 'lighthouse-report.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(options).from(element).save().then(() => {
+            // Restore hidden elements after PDF is saved
+            noPrintEls.forEach(el => el.style.display = '');
+        });
     };
+
+
 
     return (
         <div className="performace-tester">
-            <div className='input-and-button'>
+            <div className='input-and-button no-print'>
                 <input
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
@@ -84,7 +128,26 @@ export default function PerformanceTester() {
                 <button onClick={handleAudit} disabled={loading} className="analyse-button">
                     {loading ? "Analysing..." : "Run Audit"}
                 </button>
-                
+
+                {
+                    auditData && (
+                        <>
+                            <button
+                                onClick={() => handleDownloadJSON()}
+                                className="analyse-button"
+                            >Download JSON</button>
+
+                        </>
+                    )
+                }
+
+                {
+                    auditData && (
+                        <button onClick={downloadPDF} className="analyse-button">
+                            Download PDF Report
+                        </button>
+                    )
+                }
             </div>
 
             <div className="bar-graph-scores">
@@ -92,7 +155,7 @@ export default function PerformanceTester() {
                     <>
                         <StillLoading />
                     </>
-                    )}
+                )}
                 {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
 
                 {duration && !loading && (

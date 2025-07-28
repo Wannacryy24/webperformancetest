@@ -4,6 +4,8 @@ const cors = require('cors');
 const { URL } = require('url');
 const extractBestPracticesIssues = require('./utils/extractBestPractice');
 const puppeteer = require('puppeteer');
+const reportGenerator = require('lighthouse/report/generator/report-generator'); //This allows you to convert Lighthouse results to HTML manually.
+
 
 const app = express();
 
@@ -123,6 +125,7 @@ app.post('/audit', async (req, res) => {
         deviceScaleFactor: 1,
         disabled: false,
       },
+      
     });
 
     const { lhr } = result;
@@ -214,6 +217,66 @@ app.post('/audit', async (req, res) => {
     if (browser) await browser.close();
   }
 });
+
+app.post('/audit/pdf', async (req, res) => {
+  const { url } = req.body;
+
+  if (!url || !url.startsWith('http')) {
+    return res.status(400).json({ error: 'Invalid or missing URL' });
+  }
+
+  let browser;
+
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
+    const port = new URL(browser.wsEndpoint()).port;
+
+    const result = await lighthouse(url, {
+      port,
+      output: 'json',
+      logLevel: 'info',
+      onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
+      formFactor: 'desktop',
+      screenEmulation: {
+        mobile: false,
+        width: 1350,
+        height: 940,
+        deviceScaleFactor: 1,
+        disabled: false,
+      },
+    });
+
+    const htmlReport = reportGenerator.generateReport(result.lhr, 'html');
+
+    const page = await browser.newPage();
+    await page.setContent(htmlReport, { waitUntil: 'networkidle0' });
+
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+    });
+
+    await page.close();
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': 'attachment; filename="lighthouse-report.pdf"',
+    });
+
+    res.send(pdfBuffer);
+
+  } catch (error) {
+    console.error('PDF generation error:', error.message);
+    res.status(500).json({ error: 'Failed to generate PDF report' });
+  } finally {
+    if (browser) await browser.close();
+  }
+});
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
