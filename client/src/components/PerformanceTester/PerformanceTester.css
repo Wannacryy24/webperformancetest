@@ -18,6 +18,7 @@
 
 .input-and-button {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 16px;
@@ -27,12 +28,14 @@
 }
 
 .input-and-button input {
-  flex: 1;
-  height: 40px;
-  font-size: 16px;
+  
+  /* flex: 1; */
+  height: 3rem;
+  font-size: 1.2rem;
   padding: 0 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  width: 100%;
 }
 
 .analyse-button {
@@ -229,4 +232,10 @@
   justify-content: center;
   align-items: center;
   padding-bottom: 2rem;
+}
+
+.pf-btn-d{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
 }

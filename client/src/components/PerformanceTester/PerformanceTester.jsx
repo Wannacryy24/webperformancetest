@@ -125,29 +125,30 @@ export default function PerformanceTester() {
                     placeholder="Enter URL like https://XYZ.com"
                     className="border px-3 py-2 w-full rounded"
                 />
-                <button onClick={handleAudit} disabled={loading} className="analyse-button">
-                    {loading ? "Analysing..." : "Run Audit"}
-                </button>
+                <div className='pf-btn-div'>
+                    <button onClick={handleAudit} disabled={loading} className="analyse-button">
+                        {loading ? "Analysing..." : "Run Audit"}
+                    </button>
+                    {
+                        auditData && (
+                            <>
+                                <button
+                                    onClick={() => handleDownloadJSON()}
+                                    className="analyse-button"
+                                >Download JSON</button>
 
-                {
-                    auditData && (
-                        <>
-                            <button
-                                onClick={() => handleDownloadJSON()}
-                                className="analyse-button"
-                            >Download JSON</button>
+                            </>
+                        )
+                    }
 
-                        </>
-                    )
-                }
-
-                {
-                    auditData && (
-                        <button onClick={downloadPDF} className="analyse-button">
-                            Download PDF Report
-                        </button>
-                    )
-                }
+                    {
+                        auditData && (
+                            <button onClick={downloadPDF} className="analyse-button">
+                                Download PDF Report
+                            </button>
+                        )
+                    }
+                </div>
             </div>
 
             <div className="bar-graph-scores">
