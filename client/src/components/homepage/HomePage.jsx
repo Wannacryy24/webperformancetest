@@ -9,10 +9,8 @@ import HowItWorks from "../howItWorks/HowItWorks";
 
 export default function HomePage() {
   
-
   return (
     <div className="homepage">
-
       {/* Hero Section */}
       <Hero />
       <Features/>

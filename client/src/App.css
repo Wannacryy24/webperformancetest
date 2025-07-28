@@ -10,7 +10,7 @@ body {
   font-family: 'Lexend', sans-serif;
 }
 
-
 main {
   padding: 0 10vw;
+  min-height: 80vh;
 }

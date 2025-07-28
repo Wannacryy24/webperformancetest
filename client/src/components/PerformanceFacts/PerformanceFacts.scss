@@ -1,0 +1,73 @@
+.fact-slider {
+  background-color: #0f172a; // dark navy
+  color: white;
+  padding: 3rem 2rem;
+  border-radius: 1rem;
+  max-width: 800px;
+  margin: 40px auto;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.quote-icon {
+  font-size: 4rem;
+  color: #475569;
+  margin-bottom: 1rem;
+}
+
+.fact-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.author-line {
+  color: #94a3b8;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #334155;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.dot.active {
+  background: #60a5fa;
+  transform: scale(1.2);
+}
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.nav-btn:hover {
+  color: #60a5fa;
+}

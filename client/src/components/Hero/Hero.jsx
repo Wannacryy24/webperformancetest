@@ -14,7 +14,6 @@ export default function Hero() {
   return (
     <div className='hero-div'>
         <div className="hero-inner-div-first">
-          {/* <h1>Page Pilot</h1> */}
           <p className="hero-text-p">
             <span className="span-1">Instantly Audit Performance,</span>
             <span className="span-2">Accessibility, SEO</span>
@@ -29,7 +28,8 @@ export default function Hero() {
           </div>
         </div>
         <div className="hero-image">
-          <img src={image} alt="Lighthouse Metrics Preview" />
+          <img src="/undraw_metrics_5v8d.svg" alt="" />
+          {/* <img src={image} alt="Lighthouse Metrics Preview" /> */}
         </div>
     </div>
   )

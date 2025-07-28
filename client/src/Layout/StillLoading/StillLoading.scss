@@ -1,0 +1,21 @@
+
+.still-loading-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  
+  .lotte-animation {
+    width: 300px;
+    max-width: 100%;
+  }
+
+  .audit-timer {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #555;
+    font-weight: 500;
+    font-family: monospace;
+  }
+}

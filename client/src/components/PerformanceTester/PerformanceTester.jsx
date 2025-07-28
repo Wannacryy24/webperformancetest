@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import './PerformanceTester.css'
-import SkeletonBar from '../skeletonBarGraph/SkeletonBar';
+import './PerformanceTester.css';
 import Opportunities from '../Opportunities/Opportunities';
 import Diagnostics from '../Diagnostics/Diagnostic';
 import Metrics from '../metrics/Metrics';
@@ -13,16 +12,37 @@ import Accessibility from '../Accessibilty/Accessibility';
 import BestPracticesCards from '../BestPractice/BestPracticesCards';
 import React from 'react';
 import getBackendUrl from '../../utils/getBackendUrl';
+import StillLoading from '../../Layout/StillLoading/StillLoading';
+import AuditProgressSteps from '../AuditStepsLoading/AuditProgressSteps';
 
 export default function PerformanceTester() {
     const [url, setUrl] = useState('https://myportfoliovscodetheme.netlify.app/Home');
     const [auditData, setAuditData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [duration, setDuration] = useState(null);
+
+    const isValidUrl = (string) => {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    };
 
     const handleAudit = async () => {
+        if (!isValidUrl(url)) {
+            setError("❌ Please enter a valid URL including https://");
+            return;
+        }
+
         setLoading(true);
         setError(null);
+        setAuditData(null); // 🧹 Clear old data immediately
+        setDuration(null);
+
+        const start = Date.now();
 
         try {
             const res = await axios.post(`${getBackendUrl()}/audit`, { url }, {
@@ -31,6 +51,9 @@ export default function PerformanceTester() {
                 }
             });
             setAuditData(res.data);
+            console.log(res.data);
+            const end = Date.now();
+            setDuration(((end - start) / 1000).toFixed(2));
         } catch (e) {
             const errorMessage = e.response?.data?.error ||
                 e.response?.data?.message ||
@@ -43,8 +66,12 @@ export default function PerformanceTester() {
         }
     };
 
+    const handleClearAudit = () => {
+        setAuditData(null);
+        setDuration(null);
+        setError(null);
+    };
 
-    
     return (
         <div className="performace-tester">
             <div className='input-and-button'>
@@ -54,15 +81,41 @@ export default function PerformanceTester() {
                     placeholder="Enter URL like https://XYZ.com"
                     className="border px-3 py-2 w-full rounded"
                 />
-                <button onClick={handleAudit} className="analyse-button">
-                    {loading ? "Analysing" : "Run Audit"}
+                <button onClick={handleAudit} disabled={loading} className="analyse-button">
+                    {loading ? "Analysing..." : "Run Audit"}
                 </button>
+                
             </div>
 
             <div className="bar-graph-scores">
-                {loading && <SkeletonBar />}
+                {loading && (
+                    <>
+                        <StillLoading />
+                    </>
+                    )}
+                {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
 
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {duration && !loading && (
+                    <p style={{ marginTop: '10px', color: '#4CAF50' }}>
+                        ✅ Audit completed in <strong>{duration}</strong> seconds
+                    </p>
+                )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 {auditData?.screenshot && (
                     <div className="report-card">
@@ -86,25 +139,16 @@ export default function PerformanceTester() {
             </div>
 
             {auditData?.scores && <Score data={auditData.scores} />}
-
             {auditData && <PageLoadFilmstrip filmstrip={auditData.filmstrip} />}
-
             {auditData?.resourceSizes && <ResouceDoughnutChart data={auditData.resourceSizes} />}
-
-            <div >{!loading && auditData?.metrics && (<Metrics metrics={auditData.metrics} />)}</div>
-
+            {!loading && auditData?.metrics && <Metrics metrics={auditData.metrics} />}
             {auditData?.opportunities && <Opportunities data={auditData.opportunities} />}
-
             {auditData?.diagnostics && <Diagnostics data={auditData.diagnostics} />}
-
             {auditData?.waterfall && <Waterfall data={auditData.waterfall} />}
-
             {auditData?.accessibilityIssues && <Accessibility data={auditData.accessibilityIssues} />}
-
             {auditData?.bestPracticesIssues && (
                 <BestPracticesCards issues={auditData.bestPracticesIssues} />
             )}
-
         </div>
     );
 }

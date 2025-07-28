@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import "./Header.css";
-import pagepilotlogo from '../../assets/pilot.png';
 import webPerformanceLogo from '../../assets/web-maintenance.png'
 import React from 'react';
 
-
 export default function Header() {
+
   return (
     <header className="header">
       <div className="header__container">
@@ -43,7 +42,9 @@ export default function Header() {
         </nav>
 
         {/* CTA */}
-        <button className="get-started-button">Get Started</button>
+        <button className="get-started-button"
+          // onClick={}
+        >Get Started</button>
       </div>
     </header>
   );

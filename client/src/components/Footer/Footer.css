@@ -3,6 +3,10 @@
     background-color: #111827;
     color: #d1d5db;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: large;
 }
 
 footer nav a

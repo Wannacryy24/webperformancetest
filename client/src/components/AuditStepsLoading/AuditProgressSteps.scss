@@ -1,0 +1,89 @@
+.audit-progress {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 24px;
+  background: linear-gradient(to bottom right, #fdfdfd, #f7f9fa);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.audit-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.audit-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.audit-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #999;
+  transition: color 0.3s ease;
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .label {
+    flex-grow: 1;
+  }
+
+  &.done {
+    color: #1e9e55;
+
+    svg {
+      stroke: #1e9e55;
+    }
+  }
+
+  &.current {
+    color: #2563eb;
+
+    svg {
+      stroke: #2563eb;
+    }
+  }
+
+  .spin {
+    animation: spin 1s linear infinite;
+  }
+}
+
+.audit-complete {
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  color: #16a34a;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
