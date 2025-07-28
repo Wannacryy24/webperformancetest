@@ -1,15 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "./Header.css";
 import webPerformanceLogo from '../../assets/web-maintenance.png'
 import React from 'react';
 
 export default function Header() {
-
+  const navigate = useNavigate();
   return (
     <header className="header">
       <div className="header__container">
         {/* Logo */}
-        <div className="logo">
+        <div className="logo"
+          onClick={()=>navigate('/')}
+        >
           <span className="logo-icon">
             <img src={webPerformanceLogo} alt="PagePilot Logo" />
           </span>
@@ -21,7 +23,7 @@ export default function Header() {
           <Link to="/" className="nav-item">Home</Link>
           <a href="#about" className="nav-item">About</a>
           <a
-            href="https://myportfoliovscodetheme.netlify.app/Home"
+            href="https://myportfoliovscode.netlify.app/home"
             target="_blank"
             rel="noopener noreferrer"
             className="nav-item"
@@ -43,7 +45,7 @@ export default function Header() {
 
         {/* CTA */}
         <button className="get-started-button"
-          // onClick={}
+          onClick={()=>navigate('/tester')}
         >Get Started</button>
       </div>
     </header>

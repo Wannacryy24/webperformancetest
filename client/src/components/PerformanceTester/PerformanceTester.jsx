@@ -201,7 +201,7 @@ export default function PerformanceTester() {
                 )}
             </div>
 
-            {auditData?.scores && <Score data={auditData.scores} />}
+            {/* {auditData?.scores && <Score data={auditData.scores} />} */}
             {auditData && <PageLoadFilmstrip filmstrip={auditData.filmstrip} />}
             {auditData?.resourceSizes && <ResouceDoughnutChart data={auditData.resourceSizes} />}
             {!loading && auditData?.metrics && <Metrics metrics={auditData.metrics} />}
