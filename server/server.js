@@ -2,8 +2,10 @@ const express = require('express');
 const lighthouse = require('lighthouse').default;
 const cors = require('cors');
 const { URL } = require('url');
-const extractBestPracticesIssues = require('./utils/extractBestPractice');
 const puppeteer = require('puppeteer');
+const extractBestPracticesIssues = require('./utils/extractBestPractice');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
@@ -215,6 +217,20 @@ app.post('/audit', async (req, res) => {
   }
 });
 
+// ✅ Serve Vite static files
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// ✅ React Router fallback to index.html for unknown routes
+app.get('*', (req, res) => {
+  const indexPath = path.join(__dirname, '../client/dist/index.html');
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).send('Not Found');
+  }
+});
+
+// ✅ Start the server
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
