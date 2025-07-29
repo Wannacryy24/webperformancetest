@@ -220,14 +220,9 @@ app.post('/audit', async (req, res) => {
 // ✅ Serve Vite static files
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-// ✅ React Router fallback to index.html for unknown routes
+// ✅ React Router fallback — always serve index.html for unknown paths
 app.get('*', (req, res) => {
-  const indexPath = path.join(__dirname, '../client/dist/index.html');
-  if (fs.existsSync(indexPath)) {
-    res.sendFile(indexPath);
-  } else {
-    res.status(404).send('Not Found');
-  }
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 // ✅ Start the server
