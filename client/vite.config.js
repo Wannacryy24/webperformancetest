@@ -1,7 +1,18 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
 export default defineConfig({
-  base: '/', // 👈 ensures proper routing on Render static hosting
   plugins: [react()],
-})
+  build: {
+    outDir: 'dist',
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  server: {
+    historyApiFallback: true, // Optional (only works for dev server)
+  }
+});
