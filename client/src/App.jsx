@@ -9,18 +9,17 @@ import './App.css'
 
 function App() {
   return (
-    <Router basename={import.meta.env.BASE_URL}>
+    <Router>
       <Routes>
         <Route element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="tester" element={<PerformanceTester />} />
-          <Route path="skeleton" element={<SkeletonBar />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/tester" element={<PerformanceTester />} />
+          <Route path="/skeleton" element={<SkeletonBar />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );
 }
-
 
 export default App;
