@@ -220,10 +220,15 @@ app.post('/audit', async (req, res) => {
 // ✅ Serve Vite static files
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-// ✅ React Router fallback — always serve index.html for unknown paths
+// ✅ React Router fallback
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'), {
+    headers: {
+      'Cache-Control': 'no-store',
+    },
+  });
 });
+
 
 // ✅ Start the server
 const PORT = process.env.PORT || 3001;
