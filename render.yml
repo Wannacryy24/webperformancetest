@@ -1,4 +1,13 @@
-routes:
-  - type: rewrite
-    source: /.*
-    destination: /index.html
+services:
+  - type: web
+    name: webpilot
+    env: node
+    plan: free
+    rootDir: server
+    buildCommand: |
+      cd ../client
+      npm install
+      npm run build
+      cd ../server
+      npm install
+    startCommand: node index.js

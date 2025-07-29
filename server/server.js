@@ -217,12 +217,13 @@ app.post('/audit', async (req, res) => {
   }
 });
 
-// ✅ Serve Vite static files
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// Serve static files from Vite's build
+const distPath = path.join(__dirname, '../client/dist');
+app.use(express.static(distPath));
 
-// ✅ React Router fallback
+// For all non-API routes, serve index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'), {
+  res.sendFile(path.join(distPath, 'index.html'), {
     headers: {
       'Cache-Control': 'no-store',
     },
